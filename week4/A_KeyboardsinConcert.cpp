@@ -14,7 +14,9 @@
 using namespace std;
 
 int main(){
+    //n: 楽器数, m:音符数
     int n, m; cin>>n>>m;
+    //楽器iで音符jを弾くことができるか
     v2b k(n, vb(m+1, false));
     for(int i=0; i<n; i++){
         int num; cin>>num;
@@ -25,11 +27,15 @@ int main(){
     }
     int ans = 0;
     const int maxnum = 1000;
+    //すべての楽器について，演奏できる状態に初期化して全ビットを1にする
     bitset<maxnum> can = bitset<maxnum>().set();
     for(int i=0; i<m; i++){
+        //音符を入力
         int l; cin>>l;
+        //lを演奏できるかどうか
         bitset<maxnum> local = bitset<maxnum>().set();
         for(int j=0; j<n; j++){
+            //楽器jで音符lを演奏できない場合
             if(!k[j][l]){
                 //演奏できない場合、そのキーボードのフラグを消す
                 can[j] = 0;
@@ -38,7 +44,7 @@ int main(){
         }
         // cout << can << endl;
         //フラグが立っているキーボードが一つでもあれば交換は必要ない
-        //フラグが全て消えた場合、キーボードを変えたとして最新のlocalを使用し、再びフラグすべて消えるまで同じことを行う。
+        //フラグが全て消えた場合、lを演奏できるキーボードに変える．localはlを弾ける楽器にフラグが立っているため，これを採用．
         if(can.count() <= maxnum-n){
             can = local;
             ans++;
